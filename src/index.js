@@ -10,6 +10,11 @@ const prepareAndStartServer = async () => {
   app.use("/api", apiRoutes);
   app.listen(PORT, () => {
     console.log(`Listening on PORT ${PORT}`);
+    if (process.env.DB_SYNC) {
+      console.log("Syncing DB");
+      const { sequelize } = require("./models");
+      sequelize.sync({ alter: true });
+    }
   });
 };
 
