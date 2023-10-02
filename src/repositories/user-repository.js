@@ -1,4 +1,4 @@
-const { user: User } = require("../models/index");
+const { user: User, Role } = require("../models/index");
 //export the user repository
 module.exports = {
   //create a new user
@@ -41,6 +41,17 @@ module.exports = {
       const user = await User.findByPk(id);
       return user.destroy();
     } catch (error) {
+      console.log("Something went wrong in repository", error);
+      throw error;
+    }
+  },
+
+  async isAdmin(userId) {
+    try {
+      const user = await User.findByPk(userId);
+      const adminRole = await Role.findOne({ where: { name: "admin" } });
+      return user.hasRole(adminRole);
+    } catch {
       console.log("Something went wrong in repository", error);
       throw error;
     }

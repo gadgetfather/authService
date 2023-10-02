@@ -7,5 +7,12 @@ const validateUserAuth = (req, res, next) => {
   }
   next();
 };
-
-module.exports = validateUserAuth;
+const validateIsAdminUserRequest = (req, res, next) => {
+  if (!req.body.userId) {
+    return res.status(400).send({
+      message: "Missing required field: userId",
+    });
+  }
+  next();
+};
+module.exports = { validateUserAuth, validateIsAdminUserRequest };

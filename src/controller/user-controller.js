@@ -78,4 +78,18 @@ module.exports = {
       });
     }
   },
+
+  async isAdmin(req, res) {
+    try {
+      const response = await userService.isAdmin(req.body.userId);
+      console.log("response", response);
+      res.status(200).send({ isAdmin: response });
+    } catch (error) {
+      console.log("Something went wrong: Controller: isAdmin", error);
+      res.status(500).send({
+        error,
+        message: error.message,
+      });
+    }
+  },
 };

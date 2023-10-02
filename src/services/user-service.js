@@ -98,4 +98,8 @@ module.exports = {
       throw error;
     }
   },
+
+  isAdmin(userId) {
+    return userRepository.isAdmin(userId);
+  },
 };
