@@ -15,6 +15,22 @@ module.exports = {
       });
     }
   },
+
+  async login(req, res) {
+    try {
+      const { user, token } = await userService.login(
+        req.body.email,
+        req.body.password
+      );
+      res.status(200).send({ user, token });
+    } catch (error) {
+      console.log("Something went wrong: Controller: login", error);
+      res.status(500).send({
+        message: "Something went wrong",
+      });
+    }
+  },
+
   async get(req, res) {
     try {
       const user = await userService.findById(req.params.id);

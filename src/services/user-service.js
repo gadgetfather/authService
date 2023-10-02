@@ -37,6 +37,35 @@ module.exports = {
       return bcrypt.compareSync(plainPassword, encryptedPassword);
     } catch (error) {}
   },
+  async getPassword(id) {
+    try {
+      return await userRepository.getPassword(id);
+    } catch (error) {
+      console.log("Something went wrong in service: ", error);
+      throw error;
+    }
+  },
+  // login
+  async login(email, password) {
+    try {
+      // find user by email
+      const user = await userRepository.findByEmail(email);
+      if (!user) {
+        throw new Error("User not found");
+      }
+      // check password
+      const isMatch = this.checkPassword(password, user.password);
+      if (!isMatch) {
+        throw new Error("Password does not match");
+      }
+      // create token
+      const token = this.createToken(user);
+      return { user, token };
+    } catch (error) {
+      console.log("Something went wrong in service: ", error);
+      throw error;
+    }
+  },
   async findByEmail(email) {
     return await userRepository.findByEmail(email);
   },

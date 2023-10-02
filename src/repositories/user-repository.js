@@ -25,6 +25,16 @@ module.exports = {
       throw error;
     }
   },
+  //get user password
+  async getPassword(id) {
+    try {
+      const user = await User.findByPk(id);
+      return user.password;
+    } catch (error) {
+      console.log("Something went wrong in repository", error);
+      throw error;
+    }
+  },
   //delete a user
   async delete(id) {
     try {
