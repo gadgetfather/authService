@@ -16,7 +16,14 @@ module.exports = {
   },
   //find a user by id
   async findById(id) {
-    return User.findByPk(id);
+    try {
+      return User.findByPk(id, {
+        attributes: ["id", "email", "createdAt", "updatedAt"],
+      });
+    } catch (error) {
+      console.log("Something went wrong in repository", error);
+      throw error;
+    }
   },
   //delete a user
   async delete(id) {
