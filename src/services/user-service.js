@@ -1,6 +1,7 @@
 const userRepository = require("../repositories/user-repository");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config/serverConfig");
+const bcrypt = require("bcrypt");
 module.exports = {
   async create(user) {
     try {
@@ -17,18 +18,24 @@ module.exports = {
       id: user.id,
       email: user.email,
     };
-    return jwt.sign(payload, process.env.JWT_SECRET, {
+    return jwt.sign(payload, JWT_SECRET, {
       expiresIn: "1h",
     });
   },
   //verify JWT token
   verifyToken(token) {
     try {
-      return jwt.verify(token, process.env.JWT_SECRET);
+      return jwt.verify(token, JWT_SECRET);
     } catch (error) {
       console.log("Something went wrong in token verify service: ", error);
       throw error;
     }
+  },
+  // check user password
+  checkPassword(plainPassword, encryptedPassword) {
+    try {
+      return bcrypt.compareSync(plainPassword, encryptedPassword);
+    } catch (error) {}
   },
   async findByEmail(email) {
     return await userRepository.findByEmail(email);
