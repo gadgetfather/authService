@@ -81,4 +81,21 @@ module.exports = {
       throw error;
     }
   },
+
+  async isAuthenticated(token) {
+    try {
+      const decoded = this.verifyToken(token);
+      if (!decoded) {
+        throw new Error("Invalid token");
+      }
+      const user = await userRepository.findById(decoded.id);
+      if (!user) {
+        throw new Error("User not found");
+      }
+      return user.id;
+    } catch (error) {
+      console.log("Something went wrong in service: ", error);
+      throw error;
+    }
+  },
 };

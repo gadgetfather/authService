@@ -63,4 +63,19 @@ module.exports = {
       });
     }
   },
+
+  async isAuthenticated(req, res) {
+    try {
+      const token = req.headers["x-access-token"];
+      const response = await userService.isAuthenticated(token);
+      console.log("response", response);
+      res.status(200).send({ id: response });
+    } catch (error) {
+      console.log("Something went wrong: Controller: isAuthenticated", error);
+      res.status(500).send({
+        error,
+        message: error.message,
+      });
+    }
+  },
 };
